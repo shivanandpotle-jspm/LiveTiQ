@@ -1,73 +1,168 @@
-# Welcome to your Lovable project
+# LiveTiQ - Event Ticketing Platform
 
-## Project info
+A modern event ticketing platform built with React, TypeScript, and Tailwind CSS, integrated with a Node.js/Express/MongoDB backend.
 
-**URL**: https://lovable.dev/projects/a6748e5b-9376-4cff-b13f-53f8d1ee06a1
+## Features
 
-## How can I edit this code?
+- 🎫 Browse and search events
+- 🔐 User authentication (login/signup)
+- 🎨 Dark theme optimized
+- 📱 Fully responsive design
+- 🎟️ Multiple ticket tiers per event
+- ⭐ Featured events showcase
+- 🔍 Category-based filtering
+- 💳 Seamless booking flow
 
-There are several ways of editing your application.
+## Tech Stack
 
-**Use Lovable**
+### Frontend
+- React 18
+- TypeScript
+- Tailwind CSS
+- React Router
+- React Query
+- Shadcn UI Components
+- Lucide React Icons
 
-Simply visit the [Lovable Project](https://lovable.dev/projects/a6748e5b-9376-4cff-b13f-53f8d1ee06a1) and start prompting.
+### Backend (Required)
+Your backend should be running at `http://localhost:5000` with the following endpoints:
 
-Changes made via Lovable will be committed automatically to this repo.
+#### Auth Endpoints
+- `POST /api/v1/users/signup` - User registration
+- `POST /api/v1/users/login` - User login
 
-**Use your preferred IDE**
+#### Event Endpoints
+- `GET /api/v1/events` - Get all events (with optional query params)
+- `GET /api/v1/events/:id` - Get single event
+- `POST /api/v1/events` - Create event (auth required)
+- `PATCH /api/v1/events/:id` - Update event (auth required)
+- `DELETE /api/v1/events/:id` - Delete event (auth required)
 
-If you want to work locally using your own IDE, you can clone this repo and push changes. Pushed changes will also be reflected in Lovable.
+## Getting Started
 
-The only requirement is having Node.js & npm installed - [install with nvm](https://github.com/nvm-sh/nvm#installing-and-updating)
+### Prerequisites
+- Node.js 16+
+- Your backend server running on port 5000
 
-Follow these steps:
+### Installation
 
-```sh
-# Step 1: Clone the repository using the project's Git URL.
-git clone <YOUR_GIT_URL>
+1. Clone the repository
+```bash
+git clone <your-repo-url>
+cd livetiq-frontend
+```
 
-# Step 2: Navigate to the project directory.
-cd <YOUR_PROJECT_NAME>
+2. Install dependencies
+```bash
+npm install
+```
 
-# Step 3: Install the necessary dependencies.
-npm i
-
-# Step 4: Start the development server with auto-reloading and an instant preview.
+3. Start the development server
+```bash
 npm run dev
 ```
 
-**Edit a file directly in GitHub**
+4. Make sure your backend is running on `http://localhost:5000`
 
-- Navigate to the desired file(s).
-- Click the "Edit" button (pencil icon) at the top right of the file view.
-- Make your changes and commit the changes.
+## Environment Configuration
 
-**Use GitHub Codespaces**
+If your backend is running on a different URL, you can set it via environment variable:
 
-- Navigate to the main page of your repository.
-- Click on the "Code" button (green button) near the top right.
-- Select the "Codespaces" tab.
-- Click on "New codespace" to launch a new Codespace environment.
-- Edit files directly within the Codespace and commit and push your changes once you're done.
+Create a `.env` file in the root (note: This will not work on Lovable, only locally):
+```
+VITE_API_URL=http://your-backend-url/api/v1
+```
 
-## What technologies are used for this project?
+## Project Structure
 
-This project is built with:
+```
+src/
+├── components/        # Reusable UI components
+│   ├── ui/           # Shadcn UI components
+│   ├── Navbar.tsx    # Navigation bar with auth
+│   ├── Hero.tsx      # Hero section
+│   ├── EventCard.tsx # Event card component
+│   └── Footer.tsx    # Footer component
+├── pages/            # Page components
+│   ├── Index.tsx     # Home page
+│   ├── Auth.tsx      # Login/Signup page
+│   ├── EventDetails.tsx # Event details page
+│   └── NotFound.tsx  # 404 page
+├── services/         # API services
+│   ├── authService.ts
+│   └── eventService.ts
+├── types/            # TypeScript types
+│   └── index.ts
+├── config/           # Configuration
+│   └── api.ts        # API endpoints
+├── hooks/            # Custom hooks
+└── lib/              # Utility functions
+```
 
-- Vite
-- TypeScript
-- React
-- shadcn-ui
-- Tailwind CSS
+## Features Details
 
-## How can I deploy this project?
+### Authentication
+- JWT-based authentication
+- Token stored in localStorage
+- Protected routes support
+- Login/Signup forms with validation
 
-Simply open [Lovable](https://lovable.dev/projects/a6748e5b-9376-4cff-b13f-53f8d1ee06a1) and click on Share -> Publish.
+### Events
+- Display featured and upcoming events
+- Event details with ticket tiers
+- Category-based filtering
+- Search functionality
+- Event creation (for organizers)
 
-## Can I connect a custom domain to my Lovable project?
+### Dark Theme
+The application is optimized for dark mode with a custom color scheme:
+- Primary: Teal/Cyan (#00CED1)
+- Secondary: Orange/Yellow
+- Background: Dark Navy
+- Consistent design tokens throughout
 
-Yes, you can!
+## Available Scripts
 
-To connect a domain, navigate to Project > Settings > Domains and click Connect Domain.
+- `npm run dev` - Start development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint
 
-Read more here: [Setting up a custom domain](https://docs.lovable.dev/features/custom-domain#custom-domain)
+## Backend Integration
+
+This frontend expects your backend to follow the structure from:
+`https://github.com/shivanandpotle-jspm/backend`
+
+Make sure your backend:
+1. Is running on port 5000 (or configure VITE_API_URL)
+2. Has CORS enabled for the frontend origin
+3. Returns responses in the expected format
+4. Implements JWT authentication
+
+## Important Notes
+
+⚠️ **Backend Code**: Lovable only handles frontend code. Your backend at `https://github.com/shivanandpotle-jspm/backend` needs to be deployed separately (e.g., on Heroku, Railway, or any Node.js hosting service).
+
+⚠️ **API URL Configuration**: Update the API_BASE_URL in `src/config/api.ts` to point to your deployed backend URL.
+
+## How can I edit this code?
+
+**Use Lovable**
+Simply visit the Lovable Project and start prompting. Changes made via Lovable will be committed automatically to this repo.
+
+**Use your preferred IDE**
+If you want to work locally using your own IDE, you can clone this repo and push changes.
+
+## Deployment
+
+Deploy the frontend via Lovable's built-in deployment or any static hosting service:
+- Vercel
+- Netlify  
+- GitHub Pages
+- Cloudflare Pages
+
+Make sure to set the `VITE_API_URL` environment variable to your backend's URL.
+
+## License
+
+This project is licensed under the MIT License.

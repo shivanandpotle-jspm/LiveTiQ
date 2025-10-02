@@ -1,12 +1,35 @@
-import { useState } from "react";
-import { Link } from "react-router-dom";
-import { Search, Menu, X, User, Heart, Ticket } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Link, useNavigate } from "react-router-dom";
+import { Search, Menu, X, User, Heart, Ticket, LogOut } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
+import { authService } from "@/services/authService";
 import logo from "@/assets/logo.png";
 
 const Navbar = () => {
+  const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
+  const [user, setUser] = useState<any>(null);
+
+  useEffect(() => {
+    const checkAuth = () => {
+      setIsAuthenticated(authService.isAuthenticated());
+      setUser(authService.getUser());
+    };
+    
+    checkAuth();
+    window.addEventListener('storage', checkAuth);
+    
+    return () => window.removeEventListener('storage', checkAuth);
+  }, []);
+
+  const handleLogout = () => {
+    authService.logout();
+    setIsAuthenticated(false);
+    setUser(null);
+    navigate('/');
+  };
 
   return (
     <nav className="sticky top-0 z-50 w-full border-b border-border/40 bg-background/95 backdrop-blur supports-[backdrop-filter]:bg-background/60">
@@ -19,13 +42,13 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-6">
-            <Link to="/events" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+            <Link to="/" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
               Browse Events
             </Link>
-            <Link to="/categories" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+            <Link to="/" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
               Categories
             </Link>
-            <Link to="/how-it-works" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
+            <Link to="/" className="text-sm font-medium text-foreground hover:text-primary transition-colors">
               How It Works
             </Link>
           </div>
@@ -44,18 +67,28 @@ const Navbar = () => {
 
           {/* Right Actions */}
           <div className="hidden md:flex items-center space-x-4">
-            <Button variant="ghost" size="icon">
-              <Heart className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon">
-              <Ticket className="h-5 w-5" />
-            </Button>
-            <Button variant="ghost" size="icon">
-              <User className="h-5 w-5" />
-            </Button>
-            <Button className="bg-primary hover:bg-primary/90">
-              Sign In
-            </Button>
+            {isAuthenticated ? (
+              <>
+                <span className="text-sm hidden lg:block">Welcome, {user?.name}</span>
+                <Button variant="ghost" size="icon">
+                  <Heart className="h-5 w-5" />
+                </Button>
+                <Button variant="ghost" size="icon">
+                  <Ticket className="h-5 w-5" />
+                </Button>
+                <Button variant="ghost" size="icon" onClick={handleLogout} title="Logout">
+                  <LogOut className="h-5 w-5" />
+                </Button>
+                <Button>Create Event</Button>
+              </>
+            ) : (
+              <>
+                <Button variant="ghost" onClick={() => navigate('/auth')}>
+                  Login
+                </Button>
+                <Button onClick={() => navigate('/auth')}>Sign Up</Button>
+              </>
+            )}
           </div>
 
           {/* Mobile Menu Button */}
@@ -81,33 +114,39 @@ const Navbar = () => {
               />
             </div>
             <div className="flex flex-col space-y-2">
-              <Link to="/events" className="px-4 py-2 text-sm font-medium hover:bg-muted rounded-md">
+              <Link to="/" className="px-4 py-2 text-sm font-medium hover:bg-muted rounded-md">
                 Browse Events
               </Link>
-              <Link to="/categories" className="px-4 py-2 text-sm font-medium hover:bg-muted rounded-md">
+              <Link to="/" className="px-4 py-2 text-sm font-medium hover:bg-muted rounded-md">
                 Categories
               </Link>
-              <Link to="/how-it-works" className="px-4 py-2 text-sm font-medium hover:bg-muted rounded-md">
+              <Link to="/" className="px-4 py-2 text-sm font-medium hover:bg-muted rounded-md">
                 How It Works
               </Link>
             </div>
-            <div className="flex items-center justify-around pt-2 border-t">
-              <Button variant="ghost" size="sm">
-                <Heart className="h-4 w-4 mr-2" />
-                Wishlist
+            {isAuthenticated ? (
+              <>
+                <div className="flex items-center justify-around pt-2 border-t">
+                  <Button variant="ghost" size="sm">
+                    <Heart className="h-4 w-4 mr-2" />
+                    Wishlist
+                  </Button>
+                  <Button variant="ghost" size="sm">
+                    <Ticket className="h-4 w-4 mr-2" />
+                    Tickets
+                  </Button>
+                  <Button variant="ghost" size="sm" onClick={handleLogout}>
+                    <LogOut className="h-4 w-4 mr-2" />
+                    Logout
+                  </Button>
+                </div>
+                <Button className="w-full">Create Event</Button>
+              </>
+            ) : (
+              <Button className="w-full" onClick={() => navigate('/auth')}>
+                Sign In
               </Button>
-              <Button variant="ghost" size="sm">
-                <Ticket className="h-4 w-4 mr-2" />
-                Tickets
-              </Button>
-              <Button variant="ghost" size="sm">
-                <User className="h-4 w-4 mr-2" />
-                Profile
-              </Button>
-            </div>
-            <Button className="w-full bg-primary hover:bg-primary/90">
-              Sign In
-            </Button>
+            )}
           </div>
         )}
       </div>

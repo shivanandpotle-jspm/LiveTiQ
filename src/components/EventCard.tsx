@@ -1,64 +1,69 @@
-import { Calendar, MapPin, Heart } from "lucide-react";
 import { Card, CardContent, CardFooter } from "@/components/ui/card";
-import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Calendar, MapPin, Heart } from "lucide-react";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import { Event } from "@/types";
+import { format } from "date-fns";
 
 interface EventCardProps {
-  id: string;
-  title: string;
-  category: string;
-  date: string;
-  location: string;
-  price: string;
-  image: string;
-  featured?: boolean;
+  event: Event;
 }
 
-const EventCard = ({ title, category, date, location, price, image, featured }: EventCardProps) => {
+const EventCard = ({ event }: EventCardProps) => {
+  const navigate = useNavigate();
+  const [isFavorite, setIsFavorite] = useState(false);
+
+  const lowestPrice = Math.min(...event.ticketTiers.map(tier => tier.price));
+  const eventDate = format(new Date(event.date), 'MMM dd, yyyy');
+
   return (
-    <Card className="group overflow-hidden transition-all hover:shadow-xl hover:scale-[1.02] duration-300">
-      <div className="relative overflow-hidden aspect-[4/3]">
+    <Card className="group overflow-hidden hover:shadow-lg transition-all duration-300">
+      <div className="relative overflow-hidden">
         <img
-          src={image}
-          alt={title}
-          className="object-cover w-full h-full group-hover:scale-110 transition-transform duration-300"
+          src={event.images[0] || '/placeholder.svg'}
+          alt={event.title}
+          className="w-full h-48 object-cover transition-transform duration-300 group-hover:scale-110"
         />
-        <Button
-          size="icon"
-          variant="secondary"
-          className="absolute top-3 right-3 rounded-full bg-background/80 backdrop-blur hover:bg-background/90"
+        <button
+          onClick={() => setIsFavorite(!isFavorite)}
+          className="absolute top-3 right-3 p-2 rounded-full bg-background/80 backdrop-blur-sm hover:bg-background transition-colors"
         >
-          <Heart className="h-4 w-4" />
-        </Button>
-        {featured && (
-          <Badge className="absolute top-3 left-3 bg-secondary text-secondary-foreground">
-            Featured
-          </Badge>
+          <Heart
+            className={`h-5 w-5 ${isFavorite ? 'fill-primary text-primary' : 'text-foreground'}`}
+          />
+        </button>
+        {event.isFeatured && (
+          <div className="absolute top-3 left-3">
+            <Badge variant="secondary" className="font-semibold">
+              Featured
+            </Badge>
+          </div>
         )}
       </div>
-      <CardContent className="p-4 space-y-3">
-        <div className="flex items-center justify-between">
-          <Badge variant="outline" className="text-xs">
-            {category}
-          </Badge>
-          <span className="text-lg font-bold text-primary">{price}</span>
+      <CardContent className="p-4">
+        <div className="flex items-center justify-between mb-2">
+          <Badge variant="outline">{event.category}</Badge>
+          <span className="text-lg font-bold text-primary">₹{lowestPrice}</span>
         </div>
-        <h3 className="font-semibold text-lg line-clamp-2 group-hover:text-primary transition-colors">
-          {title}
-        </h3>
+        <h3 className="font-semibold text-lg mb-3 line-clamp-1">{event.title}</h3>
         <div className="space-y-2 text-sm text-muted-foreground">
-          <div className="flex items-center gap-2">
-            <Calendar className="h-4 w-4" />
-            <span>{date}</span>
+          <div className="flex items-center">
+            <Calendar className="mr-2 h-4 w-4" />
+            <span>{eventDate}</span>
           </div>
-          <div className="flex items-center gap-2">
-            <MapPin className="h-4 w-4" />
-            <span className="line-clamp-1">{location}</span>
+          <div className="flex items-center">
+            <MapPin className="mr-2 h-4 w-4" />
+            <span className="line-clamp-1">{event.location.venue}</span>
           </div>
         </div>
       </CardContent>
       <CardFooter className="p-4 pt-0">
-        <Button className="w-full bg-primary hover:bg-primary/90">
+        <Button 
+          className="w-full" 
+          onClick={() => navigate(`/events/${event._id}`)}
+        >
           Book Now
         </Button>
       </CardFooter>

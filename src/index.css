@@ -39,24 +39,24 @@ All colors MUST be HSL.
   }
 
   .dark {
-    --background: 222 47% 11%;
+    --background: 222 47% 8%;
     --foreground: 0 0% 98%;
-    --card: 217 33% 17%;
+    --card: 217 33% 12%;
     --card-foreground: 0 0% 98%;
-    --popover: 222 47% 11%;
+    --popover: 222 47% 8%;
     --popover-foreground: 0 0% 98%;
     --primary: 176 100% 42%;
     --primary-foreground: 0 0% 100%;
     --secondary: 45 98% 54%;
     --secondary-foreground: 222 47% 11%;
-    --muted: 217 33% 17%;
+    --muted: 217 33% 15%;
     --muted-foreground: 215 20% 65%;
     --accent: 176 100% 42%;
     --accent-foreground: 0 0% 100%;
     --destructive: 0 62.8% 30.6%;
     --destructive-foreground: 0 0% 98%;
-    --border: 217 33% 17%;
-    --input: 217 33% 17%;
+    --border: 217 33% 20%;
+    --input: 217 33% 20%;
     --ring: 176 100% 42%;
     --sidebar-background: 240 5.9% 10%;
     --sidebar-foreground: 240 4.8% 95.9%;
@@ -66,6 +66,29 @@ All colors MUST be HSL.
     --sidebar-accent-foreground: 240 4.8% 95.9%;
     --sidebar-border: 240 3.7% 15.9%;
     --sidebar-ring: 217.2 91.2% 59.8%;
+  }
+  
+  /* Force dark mode */
+  :root {
+    --background: 222 47% 8%;
+    --foreground: 0 0% 98%;
+    --card: 217 33% 12%;
+    --card-foreground: 0 0% 98%;
+    --popover: 222 47% 8%;
+    --popover-foreground: 0 0% 98%;
+    --primary: 176 100% 42%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 45 98% 54%;
+    --secondary-foreground: 222 47% 11%;
+    --muted: 217 33% 15%;
+    --muted-foreground: 215 20% 65%;
+    --accent: 176 100% 42%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62.8% 30.6%;
+    --destructive-foreground: 0 0% 98%;
+    --border: 217 33% 20%;
+    --input: 217 33% 20%;
+    --ring: 176 100% 42%;
   }
 }
 
